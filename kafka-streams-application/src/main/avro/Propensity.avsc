@@ -1,0 +1,25 @@
+{
+    "namespace": "avro.Message",
+    "name": "Propensity",
+    "type": "record",
+    "fields":
+        [
+            {
+                "name": "userid",
+                "type": "string"
+            },
+            {
+                "name": "timestamp",
+                "type": "long"
+            },
+            {
+                "name": "logtype",
+                "type": "string"
+            },
+            {
+                "name": "propensity",
+                "type": ["null", "double"],
+		"default": null
+            }
+        ]
+}
