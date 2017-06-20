@@ -1,0 +1,10 @@
+purchase_type: on_demand
+subnet_id: subnet-c9af8cad
+num_instances: 1
+key_name: atif-iam-keypair
+security_group_ids: sg-1c2c167b
+instance_type: m4.large
+tag_name: atif-kafka
+vol_size: 100
+role: master
+use_eips: true
