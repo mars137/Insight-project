@@ -3,9 +3,13 @@ package com.atif.kafka.streams;
 import avro.Message.Event;
 import avro.Message.Propensity;
 import avro.Message.Row;
+import com.atif.kafka.DatabaseConnect.CassandraConnector;
+import com.atif.kafka.DatabaseConnect.KeyspaceRepository;
 import com.atif.kafka.Message.*;
 import com.google.common.collect.MinMaxPriorityQueue;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import kafka.utils.ZkUtils;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serde;
@@ -17,14 +21,35 @@ import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KStreamBuilder;
 import org.apache.kafka.streams.kstream.KTable;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.UUID;
+
+
+import com.lambdaworks.redis.*;
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
 
 public class KafkaStreamsApplication {
+
+
+
+
+
     public static void main(String[] args) throws InterruptedException {
+
+        final Config config = ConfigFactory.load("cassandra");
+        CassandraConnector connector = new CassandraConnector();
+        connector.connect(config.getString("cassandra.node1"), 9042);
+        connector.connect(config.getString("cassandra.node2"), 9042);
+        connector.connect(config.getString("cassandra.node3"), 9042);
+        Session session = connector.getSession();
+
+
+        //String cassandraDNS = config.getString("cassandraDNS");
+        //String cassandraKeySpace = config.getString("cassandraKeySpac");
         StreamsConfig streamsConfig = new StreamsConfig(getProperties());
         Serde<String> stringSerde = Serdes.String();
         Serde<byte[]> bytearraySerde = Serdes.ByteArray();
@@ -85,16 +110,15 @@ public class KafkaStreamsApplication {
                         return v;
                     }
                 });
-
-        propensityTable.foreach((k, v) -> printPropensity(k, v));
-        propensityTable.to(stringSerde, bytearraySerde, "propensity-topic");
-
+        //sequenceTable.foreach((k,v) -> printEvent(k,v));
+        propensityTable.foreach((k, v) -> printPropensity(k, v,session));
+        propensityTable.to(stringSerde, bytearraySerde, "propensity");
         System.out.println("Starting sequencing.");
         ZkUtils.maybeDeletePath("localhost:2181", "consumers/try-kafka");
         KafkaStreams kafkaStreams = new KafkaStreams(kStreamBuilder, streamsConfig);
         kafkaStreams.start();
-        Thread.sleep(1000L);
-        kafkaStreams.close();
+        //Thread.sleep(1000L);
+        //kafkaStreams.close();
         System.out.println("Ending sequencing.");
     }
 
@@ -111,27 +135,44 @@ public class KafkaStreamsApplication {
         }
     }
 
-    public static void printPropensity(String k, byte[] v) {
+    public static void printPropensity(String k, byte[] v,Session session)
+    {
+
         System.out.println("printPropensity");
+
+
+
+
+
         PropensityDeserializer propensityDeserializer = new PropensityDeserializer();
         try {
             Propensity propensity = propensityDeserializer.deserializeEvent(v);
             PropensitySerializer propensitySerializer = new PropensitySerializer();
             String jsonString = propensitySerializer.serializeMessageToJSON(propensity);
             System.out.println("Key: " + k + ", " + "Value: " + jsonString);
+            System.out.println("Inserting to cassandra table userpropensity");
+
+            KeyspaceRepository sr = new KeyspaceRepository(session);
+            sr.useKeyspace("adstreams");
+
+            StringBuilder sb = new StringBuilder("INSERT INTO ").append("userpropensity ").append("JSON ").append("'").append(jsonString).append("';");
+            String query = sb.toString();
+            session.execute(query);
+
         } catch (Exception e) {
             System.out.println("Key: " + k + ", " + "Exception: " + e.getMessage());
         }
     }
 
     private static Properties getProperties() {
+        final Config config = ConfigFactory.load("streams");
         Properties props = new Properties();
-        props.put(StreamsConfig.CLIENT_ID_CONFIG, "try-kafka");
-        props.put("group.id", "try-kafka");
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "try-kafka-app");
-        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "ec2-13-56-74-46.us-west-1.compute.amazonaws.com:9092,ec2-52-52-174-223.us-west-1.compute.amazonaws.com:9092");
+        props.put(StreamsConfig.CLIENT_ID_CONFIG, "ads-kafka");
+        props.put("group.id", "ads-kafka");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "ads-kafka-app");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG,config.getString("streams.bootstrap.servers"));
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        props.put(StreamsConfig.REPLICATION_FACTOR_CONFIG, 2);
+        props.put(StreamsConfig.REPLICATION_FACTOR_CONFIG, 1);
         props.put(StreamsConfig.TIMESTAMP_EXTRACTOR_CLASS_CONFIG, MessageTimestampExtractor.class);
         props.put(StreamsConfig.KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         props.put(StreamsConfig.VALUE_SERDE_CLASS_CONFIG, Serdes.ByteArray().getClass().getName());
