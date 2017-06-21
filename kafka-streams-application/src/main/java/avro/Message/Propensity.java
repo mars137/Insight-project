@@ -13,8 +13,8 @@ import org.apache.avro.message.SchemaStore;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class Propensity extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -7248347725564553377L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Propensity\",\"namespace\":\"avro.Message\",\"fields\":[{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"timestamp\",\"type\":\"long\"},{\"name\":\"logtype\",\"type\":\"string\"},{\"name\":\"propensity\",\"type\":[\"null\",\"double\"],\"default\":null}]}");
+  private static final long serialVersionUID = -5832019242516355453L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Propensity\",\"namespace\":\"avro.Message\",\"fields\":[{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"timestamp\",\"type\":\"long\"},{\"name\":\"logtype\",\"type\":\"string\"},{\"name\":\"propensity\",\"type\":\"double\",\"default\":0.0}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -54,7 +54,7 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
   @Deprecated public java.lang.CharSequence userid;
   @Deprecated public long timestamp;
   @Deprecated public java.lang.CharSequence logtype;
-  @Deprecated public java.lang.Double propensity;
+  @Deprecated public double propensity;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -200,7 +200,7 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
     private java.lang.CharSequence userid;
     private long timestamp;
     private java.lang.CharSequence logtype;
-    private java.lang.Double propensity;
+    private double propensity;
 
     /** Creates a new Builder */
     private Builder() {
@@ -384,7 +384,7 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
       * @param value The value of 'propensity'.
       * @return This builder.
       */
-    public avro.Message.Propensity.Builder setPropensity(java.lang.Double value) {
+    public avro.Message.Propensity.Builder setPropensity(double value) {
       validate(fields()[3], value);
       this.propensity = value;
       fieldSetFlags()[3] = true;
@@ -405,7 +405,6 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public avro.Message.Propensity.Builder clearPropensity() {
-      propensity = null;
       fieldSetFlags()[3] = false;
       return this;
     }
