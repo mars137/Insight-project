@@ -17,9 +17,9 @@
                 "type": "string"
             },
             {
-                "name": "propensity",
-                "type": ["null", "double"],
-		"default": null
+               "name": "propensity",
+               "type": "double",
+               "default": 0.0
             }
         ]
 }
