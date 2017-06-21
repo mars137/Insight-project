@@ -1,0 +1,38 @@
+{
+    "namespace": "avro.Message",
+    "name": "Event",
+    "type": "record",
+    "fields":
+        [
+            {
+                "name": "userid",
+                "type": "string"
+            },
+            {
+                "name": "rows",
+                "type":
+                    {
+                        "type": "array",
+                        "items":
+                            {
+                                "name": "Row",
+                                "type": "record",
+                                "fields":
+                                    [
+                                        {"name": "uuid", "type": "string"},
+                                        {"name": "userid", "type": "string"},
+                                        {"name": "timestamp", "type": "long"},
+                                        {"name": "logtype", "type": "string"},
+                                        {"name": "campaign", "type": ["null", "string"], "default" : null},
+                                        {"name": "publisher", "type": ["null", "string"], "default" : null},
+                                        {"name": "creative", "type": ["null", "string"], "default" : null},
+                                        {"name": "placement", "type": ["null", "string"], "default" : null},
+                                        {"name": "product", "type": ["null", "string"], "default" : null},
+					{"name": "quantity", "type": ["null", "int"], "default" : null},
+					{"name": "revenue", "type": ["null", "double"], "default" : null}
+                                    ]
+                            }
+                    }
+            }
+        ]
+}
