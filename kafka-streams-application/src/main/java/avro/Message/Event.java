@@ -13,8 +13,8 @@ import org.apache.avro.message.SchemaStore;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class Event extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 4384514919368361861L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Event\",\"namespace\":\"avro.Message\",\"fields\":[{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"rows\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Row\",\"fields\":[{\"name\":\"uuid\",\"type\":\"string\"},{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"timestamp\",\"type\":\"long\"},{\"name\":\"logtype\",\"type\":\"string\"},{\"name\":\"campaign\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"publisher\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"creative\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"placement\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"product\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"quantity\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"revenue\",\"type\":[\"null\",\"double\"],\"default\":null}]}}}]}");
+  private static final long serialVersionUID = -2104341155365500011L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Event\",\"namespace\":\"avro.Message\",\"fields\":[{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"state\",\"type\":\"string\"},{\"name\":\"segment\",\"type\":\"string\"},{\"name\":\"rows\",\"type\":{\"type\":\"array\",\"items\":{\"type\":\"record\",\"name\":\"Row\",\"fields\":[{\"name\":\"uuid\",\"type\":\"string\"},{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"timestamp\",\"type\":\"long\"},{\"name\":\"logtype\",\"type\":\"string\"},{\"name\":\"campaign\",\"type\":\"string\",\"default\":\"NA\"},{\"name\":\"publisher\",\"type\":\"string\",\"default\":\"NA\"},{\"name\":\"creative\",\"type\":\"string\",\"default\":\"NA\"},{\"name\":\"placement\",\"type\":\"string\",\"default\":\"NA\"},{\"name\":\"product\",\"type\":\"string\",\"default\":\"NA\"},{\"name\":\"quantity\",\"type\":\"int\",\"default\":0},{\"name\":\"revenue\",\"type\":\"double\",\"default\":0.0}]}}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -52,6 +52,8 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
   }
 
   @Deprecated public java.lang.CharSequence userid;
+  @Deprecated public java.lang.CharSequence state;
+  @Deprecated public java.lang.CharSequence segment;
   @Deprecated public java.util.List<avro.Message.Row> rows;
 
   /**
@@ -64,10 +66,14 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
   /**
    * All-args constructor.
    * @param userid The new value for userid
+   * @param state The new value for state
+   * @param segment The new value for segment
    * @param rows The new value for rows
    */
-  public Event(java.lang.CharSequence userid, java.util.List<avro.Message.Row> rows) {
+  public Event(java.lang.CharSequence userid, java.lang.CharSequence state, java.lang.CharSequence segment, java.util.List<avro.Message.Row> rows) {
     this.userid = userid;
+    this.state = state;
+    this.segment = segment;
     this.rows = rows;
   }
 
@@ -76,7 +82,9 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
   public java.lang.Object get(int field$) {
     switch (field$) {
     case 0: return userid;
-    case 1: return rows;
+    case 1: return state;
+    case 2: return segment;
+    case 3: return rows;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -86,7 +94,9 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
     case 0: userid = (java.lang.CharSequence)value$; break;
-    case 1: rows = (java.util.List<avro.Message.Row>)value$; break;
+    case 1: state = (java.lang.CharSequence)value$; break;
+    case 2: segment = (java.lang.CharSequence)value$; break;
+    case 3: rows = (java.util.List<avro.Message.Row>)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -105,6 +115,38 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
    */
   public void setUserid(java.lang.CharSequence value) {
     this.userid = value;
+  }
+
+  /**
+   * Gets the value of the 'state' field.
+   * @return The value of the 'state' field.
+   */
+  public java.lang.CharSequence getState() {
+    return state;
+  }
+
+  /**
+   * Sets the value of the 'state' field.
+   * @param value the value to set.
+   */
+  public void setState(java.lang.CharSequence value) {
+    this.state = value;
+  }
+
+  /**
+   * Gets the value of the 'segment' field.
+   * @return The value of the 'segment' field.
+   */
+  public java.lang.CharSequence getSegment() {
+    return segment;
+  }
+
+  /**
+   * Sets the value of the 'segment' field.
+   * @param value the value to set.
+   */
+  public void setSegment(java.lang.CharSequence value) {
+    this.segment = value;
   }
 
   /**
@@ -156,6 +198,8 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
     implements org.apache.avro.data.RecordBuilder<Event> {
 
     private java.lang.CharSequence userid;
+    private java.lang.CharSequence state;
+    private java.lang.CharSequence segment;
     private java.util.List<avro.Message.Row> rows;
 
     /** Creates a new Builder */
@@ -173,9 +217,17 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
         this.userid = data().deepCopy(fields()[0].schema(), other.userid);
         fieldSetFlags()[0] = true;
       }
-      if (isValidValue(fields()[1], other.rows)) {
-        this.rows = data().deepCopy(fields()[1].schema(), other.rows);
+      if (isValidValue(fields()[1], other.state)) {
+        this.state = data().deepCopy(fields()[1].schema(), other.state);
         fieldSetFlags()[1] = true;
+      }
+      if (isValidValue(fields()[2], other.segment)) {
+        this.segment = data().deepCopy(fields()[2].schema(), other.segment);
+        fieldSetFlags()[2] = true;
+      }
+      if (isValidValue(fields()[3], other.rows)) {
+        this.rows = data().deepCopy(fields()[3].schema(), other.rows);
+        fieldSetFlags()[3] = true;
       }
     }
 
@@ -189,9 +241,17 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
         this.userid = data().deepCopy(fields()[0].schema(), other.userid);
         fieldSetFlags()[0] = true;
       }
-      if (isValidValue(fields()[1], other.rows)) {
-        this.rows = data().deepCopy(fields()[1].schema(), other.rows);
+      if (isValidValue(fields()[1], other.state)) {
+        this.state = data().deepCopy(fields()[1].schema(), other.state);
         fieldSetFlags()[1] = true;
+      }
+      if (isValidValue(fields()[2], other.segment)) {
+        this.segment = data().deepCopy(fields()[2].schema(), other.segment);
+        fieldSetFlags()[2] = true;
+      }
+      if (isValidValue(fields()[3], other.rows)) {
+        this.rows = data().deepCopy(fields()[3].schema(), other.rows);
+        fieldSetFlags()[3] = true;
       }
     }
 
@@ -235,6 +295,84 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
     }
 
     /**
+      * Gets the value of the 'state' field.
+      * @return The value.
+      */
+    public java.lang.CharSequence getState() {
+      return state;
+    }
+
+    /**
+      * Sets the value of the 'state' field.
+      * @param value The value of 'state'.
+      * @return This builder.
+      */
+    public avro.Message.Event.Builder setState(java.lang.CharSequence value) {
+      validate(fields()[1], value);
+      this.state = value;
+      fieldSetFlags()[1] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'state' field has been set.
+      * @return True if the 'state' field has been set, false otherwise.
+      */
+    public boolean hasState() {
+      return fieldSetFlags()[1];
+    }
+
+
+    /**
+      * Clears the value of the 'state' field.
+      * @return This builder.
+      */
+    public avro.Message.Event.Builder clearState() {
+      state = null;
+      fieldSetFlags()[1] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'segment' field.
+      * @return The value.
+      */
+    public java.lang.CharSequence getSegment() {
+      return segment;
+    }
+
+    /**
+      * Sets the value of the 'segment' field.
+      * @param value The value of 'segment'.
+      * @return This builder.
+      */
+    public avro.Message.Event.Builder setSegment(java.lang.CharSequence value) {
+      validate(fields()[2], value);
+      this.segment = value;
+      fieldSetFlags()[2] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'segment' field has been set.
+      * @return True if the 'segment' field has been set, false otherwise.
+      */
+    public boolean hasSegment() {
+      return fieldSetFlags()[2];
+    }
+
+
+    /**
+      * Clears the value of the 'segment' field.
+      * @return This builder.
+      */
+    public avro.Message.Event.Builder clearSegment() {
+      segment = null;
+      fieldSetFlags()[2] = false;
+      return this;
+    }
+
+    /**
       * Gets the value of the 'rows' field.
       * @return The value.
       */
@@ -248,9 +386,9 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
       * @return This builder.
       */
     public avro.Message.Event.Builder setRows(java.util.List<avro.Message.Row> value) {
-      validate(fields()[1], value);
+      validate(fields()[3], value);
       this.rows = value;
-      fieldSetFlags()[1] = true;
+      fieldSetFlags()[3] = true;
       return this;
     }
 
@@ -259,7 +397,7 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
       * @return True if the 'rows' field has been set, false otherwise.
       */
     public boolean hasRows() {
-      return fieldSetFlags()[1];
+      return fieldSetFlags()[3];
     }
 
 
@@ -269,7 +407,7 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
       */
     public avro.Message.Event.Builder clearRows() {
       rows = null;
-      fieldSetFlags()[1] = false;
+      fieldSetFlags()[3] = false;
       return this;
     }
 
@@ -279,7 +417,9 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
       try {
         Event record = new Event();
         record.userid = fieldSetFlags()[0] ? this.userid : (java.lang.CharSequence) defaultValue(fields()[0]);
-        record.rows = fieldSetFlags()[1] ? this.rows : (java.util.List<avro.Message.Row>) defaultValue(fields()[1]);
+        record.state = fieldSetFlags()[1] ? this.state : (java.lang.CharSequence) defaultValue(fields()[1]);
+        record.segment = fieldSetFlags()[2] ? this.segment : (java.lang.CharSequence) defaultValue(fields()[2]);
+        record.rows = fieldSetFlags()[3] ? this.rows : (java.util.List<avro.Message.Row>) defaultValue(fields()[3]);
         return record;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);

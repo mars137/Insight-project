@@ -13,8 +13,8 @@ import org.apache.avro.message.SchemaStore;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class Propensity extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -5832019242516355453L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Propensity\",\"namespace\":\"avro.Message\",\"fields\":[{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"timestamp\",\"type\":\"long\"},{\"name\":\"logtype\",\"type\":\"string\"},{\"name\":\"propensity\",\"type\":\"double\",\"default\":0.0}]}");
+  private static final long serialVersionUID = -4698155593595394338L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Propensity\",\"namespace\":\"avro.Message\",\"fields\":[{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"state\",\"type\":\"string\"},{\"name\":\"usersegment\",\"type\":\"string\"},{\"name\":\"timestamp\",\"type\":\"long\"},{\"name\":\"logtype\",\"type\":\"string\"},{\"name\":\"propensity\",\"type\":\"double\",\"default\":0.0}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -52,6 +52,8 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
   }
 
   @Deprecated public java.lang.CharSequence userid;
+  @Deprecated public java.lang.CharSequence state;
+  @Deprecated public java.lang.CharSequence usersegment;
   @Deprecated public long timestamp;
   @Deprecated public java.lang.CharSequence logtype;
   @Deprecated public double propensity;
@@ -66,12 +68,16 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
   /**
    * All-args constructor.
    * @param userid The new value for userid
+   * @param state The new value for state
+   * @param usersegment The new value for usersegment
    * @param timestamp The new value for timestamp
    * @param logtype The new value for logtype
    * @param propensity The new value for propensity
    */
-  public Propensity(java.lang.CharSequence userid, java.lang.Long timestamp, java.lang.CharSequence logtype, java.lang.Double propensity) {
+  public Propensity(java.lang.CharSequence userid, java.lang.CharSequence state, java.lang.CharSequence usersegment, java.lang.Long timestamp, java.lang.CharSequence logtype, java.lang.Double propensity) {
     this.userid = userid;
+    this.state = state;
+    this.usersegment = usersegment;
     this.timestamp = timestamp;
     this.logtype = logtype;
     this.propensity = propensity;
@@ -82,9 +88,11 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
   public java.lang.Object get(int field$) {
     switch (field$) {
     case 0: return userid;
-    case 1: return timestamp;
-    case 2: return logtype;
-    case 3: return propensity;
+    case 1: return state;
+    case 2: return usersegment;
+    case 3: return timestamp;
+    case 4: return logtype;
+    case 5: return propensity;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -94,9 +102,11 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
     case 0: userid = (java.lang.CharSequence)value$; break;
-    case 1: timestamp = (java.lang.Long)value$; break;
-    case 2: logtype = (java.lang.CharSequence)value$; break;
-    case 3: propensity = (java.lang.Double)value$; break;
+    case 1: state = (java.lang.CharSequence)value$; break;
+    case 2: usersegment = (java.lang.CharSequence)value$; break;
+    case 3: timestamp = (java.lang.Long)value$; break;
+    case 4: logtype = (java.lang.CharSequence)value$; break;
+    case 5: propensity = (java.lang.Double)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -115,6 +125,38 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
    */
   public void setUserid(java.lang.CharSequence value) {
     this.userid = value;
+  }
+
+  /**
+   * Gets the value of the 'state' field.
+   * @return The value of the 'state' field.
+   */
+  public java.lang.CharSequence getState() {
+    return state;
+  }
+
+  /**
+   * Sets the value of the 'state' field.
+   * @param value the value to set.
+   */
+  public void setState(java.lang.CharSequence value) {
+    this.state = value;
+  }
+
+  /**
+   * Gets the value of the 'usersegment' field.
+   * @return The value of the 'usersegment' field.
+   */
+  public java.lang.CharSequence getUsersegment() {
+    return usersegment;
+  }
+
+  /**
+   * Sets the value of the 'usersegment' field.
+   * @param value the value to set.
+   */
+  public void setUsersegment(java.lang.CharSequence value) {
+    this.usersegment = value;
   }
 
   /**
@@ -198,6 +240,8 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
     implements org.apache.avro.data.RecordBuilder<Propensity> {
 
     private java.lang.CharSequence userid;
+    private java.lang.CharSequence state;
+    private java.lang.CharSequence usersegment;
     private long timestamp;
     private java.lang.CharSequence logtype;
     private double propensity;
@@ -217,17 +261,25 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
         this.userid = data().deepCopy(fields()[0].schema(), other.userid);
         fieldSetFlags()[0] = true;
       }
-      if (isValidValue(fields()[1], other.timestamp)) {
-        this.timestamp = data().deepCopy(fields()[1].schema(), other.timestamp);
+      if (isValidValue(fields()[1], other.state)) {
+        this.state = data().deepCopy(fields()[1].schema(), other.state);
         fieldSetFlags()[1] = true;
       }
-      if (isValidValue(fields()[2], other.logtype)) {
-        this.logtype = data().deepCopy(fields()[2].schema(), other.logtype);
+      if (isValidValue(fields()[2], other.usersegment)) {
+        this.usersegment = data().deepCopy(fields()[2].schema(), other.usersegment);
         fieldSetFlags()[2] = true;
       }
-      if (isValidValue(fields()[3], other.propensity)) {
-        this.propensity = data().deepCopy(fields()[3].schema(), other.propensity);
+      if (isValidValue(fields()[3], other.timestamp)) {
+        this.timestamp = data().deepCopy(fields()[3].schema(), other.timestamp);
         fieldSetFlags()[3] = true;
+      }
+      if (isValidValue(fields()[4], other.logtype)) {
+        this.logtype = data().deepCopy(fields()[4].schema(), other.logtype);
+        fieldSetFlags()[4] = true;
+      }
+      if (isValidValue(fields()[5], other.propensity)) {
+        this.propensity = data().deepCopy(fields()[5].schema(), other.propensity);
+        fieldSetFlags()[5] = true;
       }
     }
 
@@ -241,17 +293,25 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
         this.userid = data().deepCopy(fields()[0].schema(), other.userid);
         fieldSetFlags()[0] = true;
       }
-      if (isValidValue(fields()[1], other.timestamp)) {
-        this.timestamp = data().deepCopy(fields()[1].schema(), other.timestamp);
+      if (isValidValue(fields()[1], other.state)) {
+        this.state = data().deepCopy(fields()[1].schema(), other.state);
         fieldSetFlags()[1] = true;
       }
-      if (isValidValue(fields()[2], other.logtype)) {
-        this.logtype = data().deepCopy(fields()[2].schema(), other.logtype);
+      if (isValidValue(fields()[2], other.usersegment)) {
+        this.usersegment = data().deepCopy(fields()[2].schema(), other.usersegment);
         fieldSetFlags()[2] = true;
       }
-      if (isValidValue(fields()[3], other.propensity)) {
-        this.propensity = data().deepCopy(fields()[3].schema(), other.propensity);
+      if (isValidValue(fields()[3], other.timestamp)) {
+        this.timestamp = data().deepCopy(fields()[3].schema(), other.timestamp);
         fieldSetFlags()[3] = true;
+      }
+      if (isValidValue(fields()[4], other.logtype)) {
+        this.logtype = data().deepCopy(fields()[4].schema(), other.logtype);
+        fieldSetFlags()[4] = true;
+      }
+      if (isValidValue(fields()[5], other.propensity)) {
+        this.propensity = data().deepCopy(fields()[5].schema(), other.propensity);
+        fieldSetFlags()[5] = true;
       }
     }
 
@@ -295,6 +355,84 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
     }
 
     /**
+      * Gets the value of the 'state' field.
+      * @return The value.
+      */
+    public java.lang.CharSequence getState() {
+      return state;
+    }
+
+    /**
+      * Sets the value of the 'state' field.
+      * @param value The value of 'state'.
+      * @return This builder.
+      */
+    public avro.Message.Propensity.Builder setState(java.lang.CharSequence value) {
+      validate(fields()[1], value);
+      this.state = value;
+      fieldSetFlags()[1] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'state' field has been set.
+      * @return True if the 'state' field has been set, false otherwise.
+      */
+    public boolean hasState() {
+      return fieldSetFlags()[1];
+    }
+
+
+    /**
+      * Clears the value of the 'state' field.
+      * @return This builder.
+      */
+    public avro.Message.Propensity.Builder clearState() {
+      state = null;
+      fieldSetFlags()[1] = false;
+      return this;
+    }
+
+    /**
+      * Gets the value of the 'usersegment' field.
+      * @return The value.
+      */
+    public java.lang.CharSequence getUsersegment() {
+      return usersegment;
+    }
+
+    /**
+      * Sets the value of the 'usersegment' field.
+      * @param value The value of 'usersegment'.
+      * @return This builder.
+      */
+    public avro.Message.Propensity.Builder setUsersegment(java.lang.CharSequence value) {
+      validate(fields()[2], value);
+      this.usersegment = value;
+      fieldSetFlags()[2] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'usersegment' field has been set.
+      * @return True if the 'usersegment' field has been set, false otherwise.
+      */
+    public boolean hasUsersegment() {
+      return fieldSetFlags()[2];
+    }
+
+
+    /**
+      * Clears the value of the 'usersegment' field.
+      * @return This builder.
+      */
+    public avro.Message.Propensity.Builder clearUsersegment() {
+      usersegment = null;
+      fieldSetFlags()[2] = false;
+      return this;
+    }
+
+    /**
       * Gets the value of the 'timestamp' field.
       * @return The value.
       */
@@ -308,9 +446,9 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public avro.Message.Propensity.Builder setTimestamp(long value) {
-      validate(fields()[1], value);
+      validate(fields()[3], value);
       this.timestamp = value;
-      fieldSetFlags()[1] = true;
+      fieldSetFlags()[3] = true;
       return this;
     }
 
@@ -319,7 +457,7 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'timestamp' field has been set, false otherwise.
       */
     public boolean hasTimestamp() {
-      return fieldSetFlags()[1];
+      return fieldSetFlags()[3];
     }
 
 
@@ -328,7 +466,7 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public avro.Message.Propensity.Builder clearTimestamp() {
-      fieldSetFlags()[1] = false;
+      fieldSetFlags()[3] = false;
       return this;
     }
 
@@ -346,9 +484,9 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public avro.Message.Propensity.Builder setLogtype(java.lang.CharSequence value) {
-      validate(fields()[2], value);
+      validate(fields()[4], value);
       this.logtype = value;
-      fieldSetFlags()[2] = true;
+      fieldSetFlags()[4] = true;
       return this;
     }
 
@@ -357,7 +495,7 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'logtype' field has been set, false otherwise.
       */
     public boolean hasLogtype() {
-      return fieldSetFlags()[2];
+      return fieldSetFlags()[4];
     }
 
 
@@ -367,7 +505,7 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
       */
     public avro.Message.Propensity.Builder clearLogtype() {
       logtype = null;
-      fieldSetFlags()[2] = false;
+      fieldSetFlags()[4] = false;
       return this;
     }
 
@@ -385,9 +523,9 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public avro.Message.Propensity.Builder setPropensity(double value) {
-      validate(fields()[3], value);
+      validate(fields()[5], value);
       this.propensity = value;
-      fieldSetFlags()[3] = true;
+      fieldSetFlags()[5] = true;
       return this;
     }
 
@@ -396,7 +534,7 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
       * @return True if the 'propensity' field has been set, false otherwise.
       */
     public boolean hasPropensity() {
-      return fieldSetFlags()[3];
+      return fieldSetFlags()[5];
     }
 
 
@@ -405,7 +543,7 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
       * @return This builder.
       */
     public avro.Message.Propensity.Builder clearPropensity() {
-      fieldSetFlags()[3] = false;
+      fieldSetFlags()[5] = false;
       return this;
     }
 
@@ -415,9 +553,11 @@ public class Propensity extends org.apache.avro.specific.SpecificRecordBase impl
       try {
         Propensity record = new Propensity();
         record.userid = fieldSetFlags()[0] ? this.userid : (java.lang.CharSequence) defaultValue(fields()[0]);
-        record.timestamp = fieldSetFlags()[1] ? this.timestamp : (java.lang.Long) defaultValue(fields()[1]);
-        record.logtype = fieldSetFlags()[2] ? this.logtype : (java.lang.CharSequence) defaultValue(fields()[2]);
-        record.propensity = fieldSetFlags()[3] ? this.propensity : (java.lang.Double) defaultValue(fields()[3]);
+        record.state = fieldSetFlags()[1] ? this.state : (java.lang.CharSequence) defaultValue(fields()[1]);
+        record.usersegment = fieldSetFlags()[2] ? this.usersegment : (java.lang.CharSequence) defaultValue(fields()[2]);
+        record.timestamp = fieldSetFlags()[3] ? this.timestamp : (java.lang.Long) defaultValue(fields()[3]);
+        record.logtype = fieldSetFlags()[4] ? this.logtype : (java.lang.CharSequence) defaultValue(fields()[4]);
+        record.propensity = fieldSetFlags()[5] ? this.propensity : (java.lang.Double) defaultValue(fields()[5]);
         return record;
       } catch (java.lang.Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);

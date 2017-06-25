@@ -13,8 +13,8 @@ import org.apache.avro.message.SchemaStore;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class Row extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 6729007776049728453L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Row\",\"namespace\":\"avro.Message\",\"fields\":[{\"name\":\"uuid\",\"type\":\"string\"},{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"timestamp\",\"type\":\"long\"},{\"name\":\"logtype\",\"type\":\"string\"},{\"name\":\"campaign\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"publisher\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"creative\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"placement\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"product\",\"type\":[\"null\",\"string\"],\"default\":null},{\"name\":\"quantity\",\"type\":[\"null\",\"int\"],\"default\":null},{\"name\":\"revenue\",\"type\":[\"null\",\"double\"],\"default\":null}]}");
+  private static final long serialVersionUID = -7643253130958771822L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Row\",\"namespace\":\"avro.Message\",\"fields\":[{\"name\":\"uuid\",\"type\":\"string\"},{\"name\":\"userid\",\"type\":\"string\"},{\"name\":\"timestamp\",\"type\":\"long\"},{\"name\":\"logtype\",\"type\":\"string\"},{\"name\":\"campaign\",\"type\":\"string\",\"default\":\"NA\"},{\"name\":\"publisher\",\"type\":\"string\",\"default\":\"NA\"},{\"name\":\"creative\",\"type\":\"string\",\"default\":\"NA\"},{\"name\":\"placement\",\"type\":\"string\",\"default\":\"NA\"},{\"name\":\"product\",\"type\":\"string\",\"default\":\"NA\"},{\"name\":\"quantity\",\"type\":\"int\",\"default\":0},{\"name\":\"revenue\",\"type\":\"double\",\"default\":0.0}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -60,8 +60,8 @@ public class Row extends org.apache.avro.specific.SpecificRecordBase implements 
   @Deprecated public java.lang.CharSequence creative;
   @Deprecated public java.lang.CharSequence placement;
   @Deprecated public java.lang.CharSequence product;
-  @Deprecated public java.lang.Integer quantity;
-  @Deprecated public java.lang.Double revenue;
+  @Deprecated public int quantity;
+  @Deprecated public double revenue;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -353,8 +353,8 @@ public class Row extends org.apache.avro.specific.SpecificRecordBase implements 
     private java.lang.CharSequence creative;
     private java.lang.CharSequence placement;
     private java.lang.CharSequence product;
-    private java.lang.Integer quantity;
-    private java.lang.Double revenue;
+    private int quantity;
+    private double revenue;
 
     /** Creates a new Builder */
     private Builder() {
@@ -828,7 +828,7 @@ public class Row extends org.apache.avro.specific.SpecificRecordBase implements 
       * @param value The value of 'quantity'.
       * @return This builder.
       */
-    public avro.Message.Row.Builder setQuantity(java.lang.Integer value) {
+    public avro.Message.Row.Builder setQuantity(int value) {
       validate(fields()[9], value);
       this.quantity = value;
       fieldSetFlags()[9] = true;
@@ -849,7 +849,6 @@ public class Row extends org.apache.avro.specific.SpecificRecordBase implements 
       * @return This builder.
       */
     public avro.Message.Row.Builder clearQuantity() {
-      quantity = null;
       fieldSetFlags()[9] = false;
       return this;
     }
@@ -867,7 +866,7 @@ public class Row extends org.apache.avro.specific.SpecificRecordBase implements 
       * @param value The value of 'revenue'.
       * @return This builder.
       */
-    public avro.Message.Row.Builder setRevenue(java.lang.Double value) {
+    public avro.Message.Row.Builder setRevenue(double value) {
       validate(fields()[10], value);
       this.revenue = value;
       fieldSetFlags()[10] = true;
@@ -888,7 +887,6 @@ public class Row extends org.apache.avro.specific.SpecificRecordBase implements 
       * @return This builder.
       */
     public avro.Message.Row.Builder clearRevenue() {
-      revenue = null;
       fieldSetFlags()[10] = false;
       return this;
     }
