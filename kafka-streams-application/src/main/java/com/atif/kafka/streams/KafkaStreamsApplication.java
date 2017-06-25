@@ -8,10 +8,6 @@ import com.atif.kafka.DatabaseConnect.KeyspaceRepository;
 import com.atif.kafka.Message.*;
 import com.google.common.collect.MinMaxPriorityQueue;
 
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
-import kafka.utils.ZkUtils;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
@@ -20,43 +16,36 @@ import org.apache.kafka.streams.kstream.KGroupedStream;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KStreamBuilder;
 import org.apache.kafka.streams.kstream.KTable;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.UUID;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 
-
-import com.lambdaworks.redis.*;
+;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 
 public class KafkaStreamsApplication {
-
-
-
-
-
     public static void main(String[] args) throws InterruptedException {
-
-        final Config config = ConfigFactory.load("cassandra");
-        CassandraConnector connector = new CassandraConnector();
-        connector.connect(config.getString("cassandra.node1"), 9042);
-        connector.connect(config.getString("cassandra.node2"), 9042);
-        connector.connect(config.getString("cassandra.node3"), 9042);
-        Session session = connector.getSession();
-
-
-        //String cassandraDNS = config.getString("cassandraDNS");
-        //String cassandraKeySpace = config.getString("cassandraKeySpac");
         StreamsConfig streamsConfig = new StreamsConfig(getProperties());
         Serde<String> stringSerde = Serdes.String();
         Serde<byte[]> bytearraySerde = Serdes.ByteArray();
         EventDeserializer eventDeserializer = new EventDeserializer();
 
+        final Config config = ConfigFactory.load("cassandra");
+        CassandraConnector connector = new CassandraConnector();
+        connector.connect(config.getString( "cassandra.node1"), 9042);
+        connector.connect(config.getString("cassandra.node2"), 9042);
+        connector.connect(config.getString("cassandra.node3"), 9042);
+        Session session = connector.getSession();
+
         KStreamBuilder kStreamBuilder = new KStreamBuilder();
-        KStream<String, byte[]> logStream = kStreamBuilder.stream(stringSerde, bytearraySerde, "events", "conversions");
+        KStream<String, byte[]> logStream = kStreamBuilder.stream(stringSerde, bytearraySerde, "events");
         KGroupedStream<String, byte[]> logGroupedStream = logStream.groupByKey();
 
         KTable<String, byte[]> sequenceTable = logGroupedStream.aggregate(
@@ -65,6 +54,8 @@ public class KafkaStreamsApplication {
                         return (new EventSerializer()).serializeMessage(Event
                                 .newBuilder()
                                 .setUserid("")
+                                .setState("")
+                                .setSegment("")
                                 .setRows(new ArrayList<Row>())
                                 .build());
                     } catch (IOException e) {
@@ -78,6 +69,8 @@ public class KafkaStreamsApplication {
                         Event sequence = eventDeserializer.deserializeEvent(a);
                         Event event = eventDeserializer.deserializeEvent(v);
                         sequence.setUserid(k);
+                        sequence.setState(event.getState());
+                        sequence.setSegment(event.getSegment());
                         List<Row> rowlist = new ArrayList<Row>();
                         rowlist.addAll(sequence.getRows());
                         rowlist.addAll(event.getRows());
@@ -92,29 +85,31 @@ public class KafkaStreamsApplication {
                 bytearraySerde,
                 "propensity-local"
         );
-
-        KTable<String, byte[]> propensityTable =
-                sequenceTable.mapValues(v -> {
-                    Event sequence = null;
-                    try {
-                        sequence = eventDeserializer.deserializeEvent(v);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    MinMaxPriorityQueue<Row> queue =
-                            MinMaxPriorityQueue.orderedBy(new RowComparator()).maximumSize(1000).create(sequence.getRows());
-                    try {
-                        return new SequenceTransform(sequence.getUserid().toString(), queue).conversionProbability();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return v;
-                    }
-                });
-        //sequenceTable.foreach((k,v) -> printEvent(k,v));
+        KTable<String, byte[]> propensityTable = 
+        sequenceTable.mapValues(v -> {
+        	Event sequence = null;
+			try {
+				sequence = eventDeserializer.deserializeEvent(v);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        	MinMaxPriorityQueue<Row> queue = 
+        			MinMaxPriorityQueue.orderedBy(new RowComparator()).maximumSize(1000).create(sequence.getRows());
+        	try {
+			return new SequenceTransform(sequence.getUserid().toString(), 
+				sequence.getState().toString(), 
+				sequence.getSegment().toString(), 
+				queue).conversionProbability();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return v;
+		}
+        });
+        
         propensityTable.foreach((k, v) -> printPropensity(k, v,session));
-        propensityTable.to(stringSerde, bytearraySerde, "propensity");
+        propensityTable.to(stringSerde, bytearraySerde, "propensity-topic");
+
         System.out.println("Starting sequencing.");
-        ZkUtils.maybeDeletePath("localhost:2181", "consumers/try-kafka");
         KafkaStreams kafkaStreams = new KafkaStreams(kStreamBuilder, streamsConfig);
         kafkaStreams.start();
         //Thread.sleep(1000L);
@@ -135,29 +130,20 @@ public class KafkaStreamsApplication {
         }
     }
 
-    public static void printPropensity(String k, byte[] v,Session session)
-    {
-
+    public static void printPropensity(String k, byte[] v,Session session) {
         System.out.println("printPropensity");
-
-
-
-
-
         PropensityDeserializer propensityDeserializer = new PropensityDeserializer();
         try {
             Propensity propensity = propensityDeserializer.deserializeEvent(v);
             PropensitySerializer propensitySerializer = new PropensitySerializer();
             String jsonString = propensitySerializer.serializeMessageToJSON(propensity);
-            System.out.println("Key: " + k + ", " + "Value: " + jsonString);
-            System.out.println("Inserting to cassandra table userpropensity");
-
             KeyspaceRepository sr = new KeyspaceRepository(session);
             sr.useKeyspace("adstreams");
 
-            StringBuilder sb = new StringBuilder("INSERT INTO ").append("userpropensity ").append("JSON ").append("'").append(jsonString).append("';");
+            StringBuilder sb = new StringBuilder("INSERT INTO ").append("propensity_user ").append("JSON ").append("'").append(jsonString).append("';");
             String query = sb.toString();
             session.execute(query);
+
 
         } catch (Exception e) {
             System.out.println("Key: " + k + ", " + "Exception: " + e.getMessage());
@@ -165,11 +151,12 @@ public class KafkaStreamsApplication {
     }
 
     private static Properties getProperties() {
+
         final Config config = ConfigFactory.load("streams");
         Properties props = new Properties();
-        props.put(StreamsConfig.CLIENT_ID_CONFIG, "ads-kafka");
-        props.put("group.id", "ads-kafka");
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "ads-kafka-app");
+        props.put(StreamsConfig.CLIENT_ID_CONFIG, "streams-kafka");
+        props.put("group.id", "streams-kafka");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-kafka-app");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG,config.getString("streams.bootstrap.servers"));
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(StreamsConfig.REPLICATION_FACTOR_CONFIG, 1);
