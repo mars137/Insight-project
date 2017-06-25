@@ -9,6 +9,14 @@
                 "type": "string"
             },
             {
+                "name": "state",
+                "type": "string"
+            },
+            {
+                "name": "segment",
+                "type": "string"
+            },
+            {
                 "name": "rows",
                 "type":
                     {
@@ -21,15 +29,15 @@
                                     [
                                         {"name": "uuid", "type": "string"},
                                         {"name": "userid", "type": "string"},
-                                        {"name": "timestamp", "type": "long"},
+                                       	{"name": "timestamp", "type": "long"},
                                         {"name": "logtype", "type": "string"},
-                                        {"name": "campaign", "type": ["null", "string"], "default" : null},
-                                        {"name": "publisher", "type": ["null", "string"], "default" : null},
-                                        {"name": "creative", "type": ["null", "string"], "default" : null},
-                                        {"name": "placement", "type": ["null", "string"], "default" : null},
-                                        {"name": "product", "type": ["null", "string"], "default" : null},
-					{"name": "quantity", "type": ["null", "int"], "default" : null},
-					{"name": "revenue", "type": ["null", "double"], "default" : null}
+                                        {"name": "campaign", "type": "string", "default": "NA"},
+                                        {"name": "publisher", "type": "string", "default": "NA"},
+                                        {"name": "creative", "type": "string", "default": "NA"},
+                                        {"name": "placement", "type": "string", "default": "NA"},
+                                        {"name": "product", "type": "string", "default" : "NA"},
+                                        {"name": "quantity", "type": "int", "default" : 0},
+                                        {"name": "revenue", "type": "double", "default" : 0.0}
                                     ]
                             }
                     }
