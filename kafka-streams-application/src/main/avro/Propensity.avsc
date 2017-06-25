@@ -9,6 +9,14 @@
                 "type": "string"
             },
             {
+                "name": "state",
+                "type": "string"
+            },
+            {
+                "name": "usersegment",
+                "type": "string"
+            },
+            {
                 "name": "timestamp",
                 "type": "long"
             },
@@ -17,9 +25,9 @@
                 "type": "string"
             },
             {
-               "name": "propensity",
-               "type": "double",
-               "default": 0.0
+                "name": "propensity",
+                "type": "double",
+				"default": 0.0
             }
         ]
 }
