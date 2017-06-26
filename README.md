@@ -11,7 +11,7 @@ Repository for my data engineering project done during Insight fellows program
 1. [Introduction](README.md#1-introduction)
  * 1.1 [Project Details](README.md#11-project-details)
 2. [The Pipeline](README.md#2-the-pipeline)
-
+ * 2.0 [Avro Schema](README.md#20-avro-schema)
 
 ## 1. Introduction
 
@@ -57,4 +57,13 @@ The entire pipeline of gathering sequence to computation of features to computat
 
 The data at rest a.k.a table requirement (Cassandra), say at the front end data presentation layer and table creation(KTable) when data is in motion is achieved through interpreting kafka streaming message queue as a change log and a table as a materialized view on this changelog. This cleanly resolves any contradiction between a continuous flowing stream of data and "at rest" batch processed table of data. 
 
-Through Avro schema formats , I have demomstrated that it is possible to separate out the implementation of the business logic from the details of streaming infrastructure. Avro is robust to schema changes and additional business logic computation can be developed and composed by incrementing the existing solution. 
+### 2.0 Avro Schema 
+
+There are two types of Avro schemas in play:
+
+ * the schema for the user events for clicks, impressions, paid searches and past conversions
+ * the schema for storing the continus user propensity with respect to timw
+ 
+Through Avro schema formats , I have demomstrated that it is possible to separate out the implementation of the business logic from the details of streaming infrastructure. Avro is robust to schema changes and additional business logic computation can be developed and composed by incrementing the existing solution.
+
+Both schemas were used to generate the Java Objects that are used for schema-specific serialization and deserialization of the event byte-stream flowing through Kafka producer and Kafka streams.
