@@ -3,8 +3,8 @@ Repository for my data engineering project done during Insight fellows program
 
 ## tl;dr
 
- * [Slides](bit.ly/ads1989)
- * [Live Demo](adtstreams.info)
+ * [Slides](http://www.bit.ly/ads1989)
+ * [Live Demo](http://www.adtstreams.info)
 
 
 ## 1. Introduction
