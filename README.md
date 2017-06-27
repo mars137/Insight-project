@@ -12,6 +12,9 @@ Repository for my data engineering project done during Insight fellows program
  * 1.1 [Project Details](README.md#11-project-details)
 2. [The Pipeline](README.md#2-the-pipeline)
  * 2.0 [Avro Schema](README.md#20-avro-schema)
+ * 2.1 [Kafka Ingestion](README.md#21-kafka-ingestion)
+ * 2.2 [Kafka Streams Application](README.md#22-kafka-streams-application)
+ * 2.3 [Cassandra](README.md#23-cassandra)
 
 ## 1. Introduction
 
@@ -62,8 +65,51 @@ The data at rest a.k.a table requirement (Cassandra), say at the front end data 
 There are two types of Avro schemas in play:
 
  * the schema for the user events for clicks, impressions, paid searches and past conversions
- * the schema for storing the continus user propensity with respect to timw
+ * the schema for storing the continous user propensity with respect to timw
  
-Through Avro schema formats , I have demomstrated that it is possible to separate out the implementation of the business logic from the details of streaming infrastructure. Avro is robust to schema changes and additional business logic computation can be developed and composed by incrementing the existing solution.
+Through Avro schema formats , I have demonstrated that it is possible to separate out the implementation of the business logic from the details of streaming infrastructure. Avro is robust to schema changes and additional business logic computation can be developed and composed by incrementing the existing solution.
 
 Both schemas were used to generate the Java Objects that are used for schema-specific serialization and deserialization of the event byte-stream flowing through Kafka producer and Kafka streams.
+
+### 2.1 Kafka Ingestion
+
+There are two types of streams for ingesting data through Kafka
+  - Marketing Producer which simulates user events for Clicks (CL), Impressions (IM) and Paid Search (PS)
+  - Conversion Producer which simlualates user events for user Past Conversions (CN) 
+  
+ The Avro schema for the events stream can be found [here](https://github.com/mars137/Insight-project/blob/master/kafka-producer/src/main/avro/Event.avsc)
+ 
+ The Kafka producer module can be accessed from [here](https://github.com/mars137/Insight-project/tree/master/kafka-producer) 
+ 
+ ### 2.1.1 Producer Application
+    [Marketing](https://github.com/mars137/Insight-project/blob/master/kafka-producer/src/main/java/com/atif/kafka/Producer/MarketingProducer.java) 
+    [Conversion](https://github.com/mars137/Insight-project/blob/master/kafka-producer/src/main/java/com/atif/kafka/Producer/ConversionProducer.java)
+    
+ ### 2.2 Kafka Streams Application
+
+The module for streams application can be found  [here](https://github.com/mars137/Insight-project/tree/master/kafka-streams-application)
+    It contains two main clasess 
+    - [Sequence Transform](https://github.com/mars137/Insight-project/blob/master/kafka-streams-application/src/main/java/com/atif/kafka/streams/SequenceTransform.java)
+    - [KafkaStreamsApplication](https://github.com/mars137/Insight-project/blob/master/kafka-streams-application/src/main/java/com/atif/kafka/streams/KafkaStreamsApplication.java)   
+    
+There are three streams in this application. 
+
+ - Two streams coming in from the Kafka producer( Marketing and Conversion)
+ - Joined stream made from joining Marketing and Conversion events
+ - Avro schema for the resulting joined stream can be found [here](https://github.com/mars137/Insight-project/blob/master/kafka-streams-application/src/main/avro/Propensity.avsc)
+ - Aggregations and sequencing is done in Kafka streams for a particular user id
+ 
+###  2.3 Cassandra
+
+Database connection module can be found [here](https://github.com/mars137/Insight-project/tree/master/kafka-streams-application/src/main/java/com/atif/kafka/DatabaseConnect)
+
+The CassandraConnect class from DatabaseConnect module is used for connection in KafkaStreamsApplication class.Data from the new joined stream is serialized through Avro and sinked to Cassandra through JSON format.
+ 
+ 
+
+
+        
+    
+
+
+ 
